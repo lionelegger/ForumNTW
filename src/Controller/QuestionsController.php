@@ -11,6 +11,12 @@ use App\Controller\AppController;
 class QuestionsController extends AppController
 {
 
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('RequestHandler');
+    }
+
     /**
      * Index method
      *
@@ -25,6 +31,7 @@ class QuestionsController extends AppController
 
         $this->set(compact('questions'));
         $this->set('_serialize', ['questions']);
+
     }
 
     /**
