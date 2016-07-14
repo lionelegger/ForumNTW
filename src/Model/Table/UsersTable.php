@@ -61,24 +61,36 @@ class UsersTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+        /*$validator
             ->email('email')
             ->requirePresence('email', 'create')
-            ->notEmpty('email');
+            ->notEmpty('email');*/
 
-        $validator
+        /*$validator
             ->requirePresence('password', 'create')
-            ->notEmpty('password');
+            ->notEmpty('password');*/
 
         $validator
             ->requirePresence('name', 'create')
             ->notEmpty('name');
 
-        $validator
+        /*$validator
             ->requirePresence('role', 'create')
-            ->notEmpty('role');
+            ->notEmpty('role');*/
 
-        return $validator;
+        return $validator
+            ->notEmpty('email', "Un email (username) est nécessaire")
+            ->notEmpty('password', 'Un mot de passe est nécessaire')
+            ->notEmpty('role', 'Un role est nécessaire')
+            ->add('role', 'inList', [
+                'rule' => ['inList', ['admin', 'author', 'user']],
+                'message' => 'Merci de rentrer un role valide'
+            ]);
+
+
+
+
+
     }
 
     /**

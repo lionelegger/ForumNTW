@@ -19,9 +19,6 @@
     <option name="strutsValidatorFiles" />
     <option name="enable" value="false" />
   </component>
-  <component name="SvnConfiguration">
-    <configuration>$USER_HOME$/.subversion</configuration>
-  </component>
   <component name="masterDetails">
     <states>
       <state key="ProjectJDKs.UI">

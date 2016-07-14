@@ -33,6 +33,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 </head>
+<?php if ($userSession = $this->request->session()->read('Auth.User')) ; ?>
 <body>
     <nav class="top-bar expanded" data-topbar role="navigation">
         <ul class="title-area large-3 medium-4 columns">
@@ -42,13 +43,32 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </ul>
         <div class="top-bar-section">
             <ul class="right">
-                <li><a target="_blank" href="http://book.cakephp.org/3.0/">Documentation</a></li>
-                <li><a target="_blank" href="http://api.cakephp.org/3.0/">API</a></li>
+                <?php if($userSession): ?>
+                    <li><a>Welcome <?= $userSession['name'] ?></a></li>
+                    <li><?= $this->Html->link(__('Logout'), ['controller' => 'Users', 'action' => 'logout']) ?></li>
+                <?php else: ?>
+                    <li><?= $this->Html->link(__('Login'), ['controller' => 'Users', 'action' => 'login']) ?></li>
+                    <li><?= $this->Html->link(__('Register'), ['controller' => 'Users', 'action' => 'register']) ?></li>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>
     <?= $this->Flash->render() ?>
+<!--    --><?//= $this->Flash->render('auth') ?>
     <div class="container clearfix">
+        <nav class="large-3 medium-4 columns" id="actions-sidebar">
+            <ul class="side-nav">
+                <li class="heading"><?= __('Menu') ?></li>
+                <li><?= $this->Html->link(__('List Questions'), ['controller' => 'Questions', 'action' => 'index']) ?></li>
+                <?php if ($userSession && $userSession['role'] !== 'user') { ?>
+                    <li><?= $this->Html->link(__('New Question'), ['controller' => 'Questions', 'action' => 'add']) ?></li>
+                    <?php if ($userSession['role'] === 'admin') { ?>
+                        <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
+                        <li><?= $this->Html->link(__('List Comments'), ['controller' => 'Comments', 'action' => 'index']) ?></li>
+                    <?php } ?>
+                <?php } ?>
+            </ul>
+        </nav>
         <?= $this->fetch('content') ?>
     </div>
     <footer>

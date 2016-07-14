@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 
 /**
  * Questions Controller
@@ -10,6 +11,10 @@ use App\Controller\AppController;
  */
 class QuestionsController extends AppController
 {
+
+    public function beforeFilter(Event $event){
+        $this->Auth->allow(['index', 'view']);
+    }
 
     public function initialize()
     {
@@ -61,6 +66,7 @@ class QuestionsController extends AppController
         $question = $this->Questions->newEntity();
         if ($this->request->is('post')) {
             $question = $this->Questions->patchEntity($question, $this->request->data);
+            $question->user_id = $this->Auth->user('id');
             if ($this->Questions->save($question)) {
                 $this->Flash->success(__('The question has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -116,5 +122,23 @@ class QuestionsController extends AppController
             $this->Flash->error(__('The question could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function isAuthorized($user)
+    {
+        // Tous les utilisateurs enregistrés peuvent ajouter des articles
+        if ($this->request->action === 'add' && $user['role'] != 'user') {
+            return true;
+        }
+
+        // Le propriétaire d'une question peut l'éditer et le supprimer
+        if (in_array($this->request->action, ['edit', 'delete'])) {
+            $questionId = (int)$this->request->params['pass'][0];
+            if ($this->Questions->isOwnedBy($questionId, $user['id'])) {
+                return true;
+            }
+        }
+
+        return parent::isAuthorized($user);
     }
 }

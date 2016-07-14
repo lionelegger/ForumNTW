@@ -6,6 +6,7 @@
         <li><?= $this->Html->link(__('New Answer'), ['controller' => 'Answers', 'action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List Questions'), ['controller' => 'Questions', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Question'), ['controller' => 'Questions', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Logout'), ['action' => 'logout']) ?></li>
     </ul>
 </nav>
 <div class="users index large-9 medium-8 columns content">
