@@ -83,4 +83,9 @@ class AnswersTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'));
         return $rules;
     }
+
+    public function isOwnedBy($answerId, $userId)
+    {
+        return $this->exists(['id' => $answerId, 'user_id' => $userId]);
+    }
 }

@@ -60,11 +60,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <ul class="side-nav">
                 <li class="heading"><?= __('Menu') ?></li>
                 <li><?= $this->Html->link(__('List Questions'), ['controller' => 'Questions', 'action' => 'index']) ?></li>
+                <li><?= $this->Html->link(__('List Answers'), ['controller' => 'Answers', 'action' => 'index']) ?></li>
                 <?php if ($userSession && $userSession['role'] !== 'user') { ?>
                     <li><?= $this->Html->link(__('New Question'), ['controller' => 'Questions', 'action' => 'add']) ?></li>
                     <?php if ($userSession['role'] === 'admin') { ?>
                         <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
-                        <li><?= $this->Html->link(__('List Comments'), ['controller' => 'Comments', 'action' => 'index']) ?></li>
+                        <li><?= $this->Html->link(__('List Questions'), ['controller' => 'Questions', 'action' => 'index']) ?></li>
+                        <li><?= $this->Html->link(__('List Answers'), ['controller' => 'Answers', 'action' => 'index']) ?></li>
                     <?php } ?>
                 <?php } ?>
             </ul>

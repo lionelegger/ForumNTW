@@ -49,11 +49,25 @@ class QuestionsController extends AppController
     public function view($id = null)
     {
         $question = $this->Questions->get($id, [
-            'contain' => ['Users', 'Answers']
+            'contain' => ['Users', 'Answers' => ['Users']]
         ]);
 
         $this->set('question', $question);
         $this->set('_serialize', ['question']);
+
+        if ($this->request->is('post')) {
+            $this->loadModel('Answers');
+            $answer = $this->Answers->newEntity();
+            $answer = $this->Answers->patchEntity($answer, $this->request->data);
+            $answer->question_id = $id;
+            $answer->user_id = $this->Auth->user('id');
+            if ($this->Answers->save($answer)) {
+                $this->Flash->success(__('The answer has been saved.'));
+                return $this->redirect($this->referer());
+            } else {
+                $this->Flash->error(__('The answer could not be saved. Please, try again.'));
+            }
+        }
     }
 
     /**

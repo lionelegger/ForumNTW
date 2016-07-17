@@ -112,4 +112,23 @@ class AnswersController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+
+
+    public function isAuthorized($user)
+    {
+        // Tous les utilisateurs enregistrés peuvent ajouter des Réponses
+        if ($this->request->action === 'add' && $user['role'] != 'user') {
+            return true;
+        }
+
+        // Le propriétaire d'une réponse peut l'éditer et le supprimer
+        if (in_array($this->request->action, ['edit', 'delete'])) {
+            $answerId = (int)$this->request->params['pass'][0];
+            if ($this->Answers->isOwnedBy($answerId, $user['id'])) {
+                return true;
+            }
+        }
+
+        return parent::isAuthorized($user);
+    }
 }

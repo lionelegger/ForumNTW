@@ -26,9 +26,14 @@
                 <td><?= h($question->modified) ?></td>
                 <?php if (($userSession && $userSession['role'] !== 'user')): ?>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $question->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $question->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $question->id], ['confirm' => __('Are you sure you want to delete # {0}?', $question->id)]) ?>
+                        <?= $this->Html->link(__('View'), ['action' => 'view', $question->id]) ?> /
+                        <?
+                        if (($userSession && $userSession['id'] == $question->user->id)):
+                            echo $this->Html->link(__('Edit'), ['action' => 'edit', $question->id]);
+                            echo " / ";
+                            echo $this->Form->postLink(__('Delete'), ['action' => 'delete', $question->id], ['confirm' => __('Are you sure you want to delete # {0}?', $question->id)]);
+                        endif;
+                        ?>
                     </td>
                 <?php endif; ?>
             </tr>

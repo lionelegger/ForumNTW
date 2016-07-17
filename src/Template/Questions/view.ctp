@@ -1,40 +1,8 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Question'), ['action' => 'edit', $question->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Question'), ['action' => 'delete', $question->id], ['confirm' => __('Are you sure you want to delete # {0}?', $question->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Questions'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Question'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Answers'), ['controller' => 'Answers', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Answer'), ['controller' => 'Answers', 'action' => 'add']) ?> </li>
-    </ul>
-</nav>
+<?php if ($userSession = $this->request->session()->read('Auth.User')) ; ?>
 <div class="questions view large-9 medium-8 columns content">
     <h3><?= h($question->title) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th><?= __('User') ?></th>
-            <td><?= $question->has('user') ? $this->Html->link($question->user->name, ['controller' => 'Users', 'action' => 'view', $question->user->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Title') ?></th>
-            <td><?= h($question->title) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Id') ?></th>
-            <td><?= $this->Number->format($question->id) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Created') ?></th>
-            <td><?= h($question->created) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Modified') ?></th>
-            <td><?= h($question->modified) ?></td>
-        </tr>
-    </table>
+    <p><?= h($question->body) ?></p>
+    <p>Written by <?= h($question->user->name) ?><small> <?= $question->created->nice('Europe/Paris', 'fr-FR') ?></small></p>
     <div class="row">
         <h4><?= __('Body') ?></h4>
         <?= $this->Text->autoParagraph(h($question->body)); ?>
@@ -42,32 +10,34 @@
     <div class="related">
         <h4><?= __('Related Answers') ?></h4>
         <?php if (!empty($question->answers)): ?>
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th><?= __('Id') ?></th>
-                <th><?= __('Question Id') ?></th>
-                <th><?= __('User Id') ?></th>
-                <th><?= __('Message') ?></th>
-                <th><?= __('Created') ?></th>
-                <th><?= __('Modified') ?></th>
-                <th class="actions"><?= __('Actions') ?></th>
-            </tr>
-            <?php foreach ($question->answers as $answers): ?>
-            <tr>
-                <td><?= h($answers->id) ?></td>
-                <td><?= h($answers->question_id) ?></td>
-                <td><?= h($answers->user_id) ?></td>
-                <td><?= h($answers->message) ?></td>
-                <td><?= h($answers->created) ?></td>
-                <td><?= h($answers->modified) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Answers', 'action' => 'view', $answers->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Answers', 'action' => 'edit', $answers->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Answers', 'action' => 'delete', $answers->id], ['confirm' => __('Are you sure you want to delete # {0}?', $answers->id)]) ?>
-                </td>
-            </tr>
+            <?php foreach ($question->answers as $answer): ?>
+                <p><small><?= h($answer->user->name) ?>, <?= $answer->created->nice('Europe/Paris', 'fr-FR') ?></small></p>
+                <?php if (($userSession && $userSession['role'] === 'admin')): ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => 'Answers', 'action' => 'edit', $answer->id]) ?> / <?= $this->Form->postLink(__('Delete'), ['controller' => 'Answers', 'action' => 'delete', $answer->id], ['confirm' => __('Are you sure you want to delete # {0}?', $answer->id)]) ?>
+                <?php endif; ?>
+                <p><?= h($answer->message) ?></p>
+                <?
+                if (($userSession && $userSession['id'] == $answer->user->id)):
+                    echo $this->Html->link(__('Edit'), ['controller' => 'Answers', 'action' => 'edit', $answer->id]);
+
+                    echo " / ";
+                    echo $this->Form->postLink(__('Delete'), ['controller' => 'Answers', 'action' => 'delete', $answer->id], ['confirm' => __('Are you sure you want to delete # {0}?', $answer->id)]);
+                endif;
+                ?>
             <?php endforeach; ?>
-        </table>
         <?php endif; ?>
     </div>
+    <?php if ($userSession): ?>
+        <div>
+            <h4><?= __('Add a answer') ?></h4>
+            <?= $this->Form->create('Answers') ?>
+            <fieldset>
+                <?php
+                echo $this->Form->input('message');
+                ?>
+            </fieldset>
+            <?= $this->Form->button(__('Send')) ?>
+            <?= $this->Form->end() ?>
+        </div>
+    <?php endif; ?>
 </div>
