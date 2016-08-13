@@ -56,7 +56,8 @@ class AppController extends Controller
                 ]
             ],
             'loginRedirect' => [
-                'controller' => 'Questions',
+                'controller' => '/',
+//                'controller' => 'Questions',
                 'action' => 'index'
             ],
             'logoutRedirect' => [
