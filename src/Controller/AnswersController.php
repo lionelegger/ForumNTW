@@ -120,7 +120,7 @@ class AnswersController extends AppController
         if ($this->request->action === 'add' && $user['role'] != 'user') {
             return true;
         }
-
+        else
         // Le propriétaire d'une réponse peut l'éditer et le supprimer
         if (in_array($this->request->action, ['edit', 'delete'])) {
             $answerId = (int)$this->request->params['pass'][0];
@@ -129,6 +129,8 @@ class AnswersController extends AppController
             }
         }
 
-        return parent::isAuthorized($user);
+        return false;
+
+//        return parent::isAuthorized($user);
     }
 }

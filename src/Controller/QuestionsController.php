@@ -83,7 +83,7 @@ class QuestionsController extends AppController
             $question->user_id = $this->Auth->user('id');
             if ($this->Questions->save($question)) {
                 $this->Flash->success(__('The question has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => '/', 'action' => 'index']);
             } else {
                 $this->Flash->error(__('The question could not be saved. Please, try again.'));
             }
@@ -140,11 +140,16 @@ class QuestionsController extends AppController
 
     public function isAuthorized($user)
     {
+        // Admins peuvent effacer et éditer n'importe quelle question
+        if ($user['role'] == 'admin') {
+            return true;
+        }
+
         // Tous les utilisateurs enregistrés peuvent ajouter des articles
         if ($this->request->action === 'add' && $user['role'] != 'user') {
             return true;
         }
-
+        else
         // Le propriétaire d'une question peut l'éditer et le supprimer
         if (in_array($this->request->action, ['edit', 'delete'])) {
             $questionId = (int)$this->request->params['pass'][0];
@@ -153,6 +158,8 @@ class QuestionsController extends AppController
             }
         }
 
-        return parent::isAuthorized($user);
+        return false;
+
+//        return parent::isAuthorized($user);
     }
 }

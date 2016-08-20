@@ -1,7 +1,13 @@
-button a {
+button.btn-primary a {
     color: #f2f2f2;
 }
-button a:hover {
+button.btn-primary a:hover {
     color: #FFF;
     text-decoration: none;
 }
+a.glyphicon-btn {
+    display: inline-block;
+    cursor: pointer;
+    cursor: hand;
+}
+

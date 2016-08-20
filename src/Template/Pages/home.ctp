@@ -30,98 +30,73 @@ $this->layout = false;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title><?= $this->fetch('title') ?></title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <?= $this->Html->script('angular.js') ?>
+    <?= $this->Html->script('angular-route.min.js') ?>
     <!--  Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <?= $this->Html->css('lionel.css') ?>
 </head>
 <?php if ($userSession = $this->request->session()->read('Auth.User')) ; ?>
-<body ng-app="forumApp">
-<div class="main container">
-    <div class="row">
-        <div class="col-md-12">
-            <!--<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
-                Login
-            </button>-->
-            <?php if($userSession): ?>
-                <button type="button" class="btn btn-primary pull-right"><?= $this->Html->link(__('Logout'), ['controller' => 'Users', 'action' => 'logout']) ?></button>
-                <button type="button" class="btn btn-link pull-right">Welcome <?= $userSession['name'] ?></button>
-            <?php else: ?>
-                <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">Login</button>
-                <?/*= $this->Html->link(__('Login'), ['controller' => 'Users', 'action' => 'login']) */?>
-                <button type="button" class="btn btn-danger pull-right"><?= $this->Html->link(__('Register'), ['controller' => 'Users', 'action' => 'register']) ?></button>
-            <?php endif; ?>
-            <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">Login</h4>
-                        </div>
-                        <form method="post" action="/users/login" accept-charset="utf-8" _lpchecked="1">
-                            <div style="display:none;">
-                                <input type="hidden" name="_method" value="POST">
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" name="email" class="form-control" id="email" placeholder="Email">
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" name="password" class="form-control" id="password" placeholder="Password">
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Login</button>
-                            </div>
-                        </form>
+<body ng-app="myApp" ng-controller="MainCtrl">
 
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Lionel EGGER</a>
         </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                <li><a href="#">Link</a></li>
+            </ul>
+
+            <?php if($userSession): ?>
+                <span class="hidden" id="userId" data-id="<?= $userSession['id'] ?>"></span>
+                <form class="navbar-form navbar-right">
+                    <button type="button" class="btn btn-default"><?= $this->Html->link(__('Logout'), ['controller' => 'Users', 'action' => 'logout']) ?></button>
+                </form>
+                <p class="navbar-text navbar-right">Welcome <?= $userSession['name'] ?></p>
+            <?php else: ?>
+                <form class="navbar-form navbar-right" method="post" action="/users/login" accept-charset="utf-8" _lpchecked="1">
+                    <div style="display:none;">
+                        <input type="hidden" name="_method" value="POST">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" class="form-control" id="email" placeholder="Email">
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>&nbsp;
+                    <button type="button" class="btn btn-link pull-right"><?= $this->Html->link(__('Register'), ['controller' => 'Users', 'action' => 'register']) ?></button>
+                </form>
+            <?php endif; ?>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <p>LOGIN ID = *<span ng-bind="currentUserId"></span>*</p>
+    <div ng-class="'alert alert-' + message().type" ng-show="message().show">
+        <button type="button" class="close" ng-click="message().show = false">×</button>
+        <msg key-expr="message().text"></msg>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <h1 class="title">Forum NWT</h1>
-        </div>
-        <div class="col-md-6" id="search">
-            Search here
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div ng-controller="questionsController as questions">
-                <p>{{questions.length}} questions :</p>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Questions</th>
-                        <th>Date</th>
-                        <th>Answers</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="question in questions">
-                        <td>{{question.id}}</td>
-                        <td>{{question.title}}</td>
-                        <td>{{question.created | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
-                        <td>?? nombre de réponses ??</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    <ng-view></ng-view>
 </div>
+
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<?= $this->Html->script('jquery.min.js') ?>
 <!-- Latest compiled and minified Boostrap JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-<script src="/webroot/js/controller.js"></script>
+<?= $this->Html->script('bootstrap.min.js') ?>
+<?= $this->Html->script('app.js') ?>
+<?= $this->Html->script('controllers.js') ?>
 <script>window.onload = initialize;</script>
 </body>
 </html>

@@ -1,0 +1,110 @@
+<div>
+    <h1 class="page-header">Question List</h1>
+    <p>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#addQuestionModal" ng-if="currentUserId">Add a question</button>
+        <!-- ADD QUESTION modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="addQuestionModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Add a question</h4>
+                    </div>
+                    <form method="post" accept-charset="utf-8" _lpchecked="1">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <input type="text" name="title" class="form-control" id="title" placeholder="Title" ng-model="questionToAdd.title">
+                            </div>
+                            <div class="form-group">
+                                <label for="body">Body</label>
+                                <textarea name="body" class="form-control" required="required" id="body" rows="5" placeholder="Content" ng-model="questionToAdd.body"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="addQuestion" ng-click="addQuestion()" data-dismiss="modal">Add</button>
+                        </div>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <!-- EDIT QUESTION modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="editQuestionModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form method="post" accept-charset="utf-8" _lpchecked="1">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <!--<input type="text" name="title" class="form-control" id="editTitle" ng-model="questionEditTitle">-->
+                                <input type="text" name="title" class="form-control" id="editTitle" ng-model="questionToEdit.title">
+                            </div>
+                            <div class="form-group">
+                                <label for="body">Body</label>
+                                <!--<textarea name="body" class="form-control" required="required" id="editBody" rows="5" ng-model="questionEditBody"></textarea>-->
+                                <textarea name="body" class="form-control" required="required" id="editBody" rows="5" ng-model="questionToEdit.body"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="editQuestionSave" ng-click="editQuestionSave(questionToEdit.id)" data-dismiss="modal">Save</button>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <!-- DELETE QUESTION modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="editQuestionModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Delete a question</h4>
+                    </div>
+                    <form method="post" accept-charset="utf-8" _lpchecked="1">
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this question?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="deleteQuestion" ng-click="deleteQuestion()" data-dismiss="modal">Delete</button>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+    </p>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="25px">ID</th>
+            <th>AUTHOR</th>
+            <th>TITLE</th>
+            <th>CONTENT</th>
+            <th>CREATED DATE</th>
+            <th width="50px"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="question in questions">
+            <td>{{question.id}}</td>
+            <td>{{question.user.name}} - {{question.user.id}} - {{question.user.role}}</td>
+            <td>{{question.title}}</td>
+            <td>{{question.body}}</td>
+            <td>{{question.created|date:'short'}}</td>
+            <td>
+                <a class="glyphicon-btn" ng-click="editQuestionLoad(question.id)" ng-show="currentUserId==question.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#editQuestionModal"><i class="glyphicon glyphicon-pencil"></i></a>
+                <a class="glyphicon-btn" ng-click="deleteQuestion(question.id)" ng-show="currentUserId==question.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#deleteQuestionModal"><i class="glyphicon glyphicon-remove-circle"></i></a>
+            </td>
+        </span>
+        </tbody>
+    </table>
+</div>

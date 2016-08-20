@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Core\Exception\Exception;
 use Cake\Event\Event;
 
 /**
@@ -45,6 +46,27 @@ class UsersController extends AppController
 
         $this->set('user', $user);
         $this->set('_serialize', ['user']);
+    }
+
+    /**
+     *
+     */
+    public function current() {
+        /*try {
+            $this->set('user', $this->request->session()->read('Auth.User'));
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }*/
+
+        $this->set('user', $this->request->session()->read('Auth.User'));
+
+        /*if ($user = $this->request->session()->read('Auth.User')) {
+            $this->set('user', $user);
+        }
+        else {
+            throw new Exception("User non authentificated");
+        }*/
     }
 
     /**
@@ -156,6 +178,11 @@ class UsersController extends AppController
         }
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
+    }
+
+    public function isAuthorized($user)
+    {
+        return true;
     }
 
 }
