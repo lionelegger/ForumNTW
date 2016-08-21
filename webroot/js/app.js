@@ -2,8 +2,8 @@ as = angular.module('myApp', ['ngRoute']);
 as.config(function($routeProvider) {
     $routeProvider
         .when('/questions', {templateUrl: 'partials/questions.html', controller: 'QuestionsCtrl'})
-        //.when('/new-question', {templateUrl: 'partials/new-question.html', controller: 'NewQuestionCtrl'})
-        .when('/answers/:id', {templateUrl: 'partials/answers.html', controller: 'LoadAnswersCtrl'})
+        .when('/search', {templateUrl: 'partials/search.html', controller: 'SearchCtrl'})
+        .when('/questions/:id', {templateUrl: 'partials/answers.html', controller: 'AnswersCtrl'})
         .otherwise({redirectTo: '/questions'});
 });
 

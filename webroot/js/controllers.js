@@ -1,4 +1,4 @@
-as.controller('MainCtrl', function($scope, $http) {
+as.controller('MainCtrl', function($scope, $http, $location) {
 
     $http.get('/users/current.json')
         .success(function(data) {
@@ -19,16 +19,13 @@ as.controller('MainCtrl', function($scope, $http) {
         console.log("call loadQuestion");
     };
 
+
+    $scope.isCurrentPath = function (path) {
+        return $location.path() == path;
+    };
+
 });
 
-/**
- * Filter to render HTML code
- */
-as.filter("sanitize", ["$sce", function($sce) {
-    return function(htmlCode){
-        return $sce.trustAsHtml(htmlCode);
-    }
-}]);
 
 as.controller('LoginCtrl', function($scope, $rootScope, $http) {
     $scope.login = {};
@@ -36,7 +33,6 @@ as.controller('LoginCtrl', function($scope, $rootScope, $http) {
         console.log('call login');
         $http.post('/Users/login', $scope.login)
             .success(function(data, status, headers, config) {
-                // console.log($scope.login);
                 console.log("logged!");
             }).error(function(data, status, headers, config) {
                 $scope.loginErrorMsg = "<div class='text-danger'>An error occurred...</div>";
@@ -53,11 +49,10 @@ as.controller('QuestionsCtrl', function($scope, $rootScope, $http) {
         $http.get('/questions.json')
             .success(function(data, status, headers, config) {
                 $scope.questions = data.questions;
-                console.log("Questions refreshed!");
+                console.log("Questions loaded!");
             }).error(function(data, status, headers, config) {
         });
     };
-
     $scope.loadQuestions();
 
     // Edit a question (part1: when press on edit button => load the data)
@@ -104,8 +99,22 @@ as.controller('QuestionsCtrl', function($scope, $rootScope, $http) {
         });
     };
 
-    // Delete a question
-    $scope.deleteQuestion = function(id) {
+    // Delete a question (part 1: Ask for confirmation)
+    $scope.questionToDelete = {};
+    $scope.deleteQuestionLoad = function(id) {
+        $http
+            .get('/Questions/view/' + id + '.json')
+            .success(function(data, status, headers, config) {
+                $scope.questionToDelete.title = data.question.title;
+                $scope.questionToDelete.body = data.question.body;
+                $scope.questionToDelete.id = data.question.id;
+            }).error(function(data, status, headers, config) {
+
+        });
+    };
+
+    // Delete a question (part 2: Delete the question)
+    $scope.deleteQuestionSave = function(id) {
         console.log('call delQuestion');
         console.log('Delete question ' + id + '...');
         $http
@@ -118,3 +127,93 @@ as.controller('QuestionsCtrl', function($scope, $rootScope, $http) {
     };
 });
 
+
+as.controller('AnswersCtrl', function($scope, $rootScope, $http, $routeParams) {
+    console.log('call AnswersCtrl');
+
+    // Load the list of answers corresponding to a specific question
+    $scope.loadAnswers = function() {
+        console.log('call loadAnswers for question '  + $routeParams['id']);
+        $http.get('/questions/' + $routeParams['id'] +'.json')
+            .success(function(data, status, headers, config) {
+                $scope.question = data.question;
+                $scope.answers = data.question.answers;
+                console.log($scope.question.answers);
+                console.log('Question ' + $routeParams['id'] +' and corresponding answers loaded!');
+            }).error(function(data, status, headers, config) {
+        });
+    };
+    $scope.loadAnswers();
+
+
+    // Edit an answer (part1: when press on edit button => load the data)
+    $scope.editAnswerLoad = function(id) {
+        console.log('call editAnswerLoad');
+        console.log('Load answer ' + id + '...');
+        $http
+            .get('/Answers/view/' + id + '.json')
+            .success(function(data, status, headers, config) {
+                $scope.answerToEdit.message = data.answer.message;
+                $scope.answerToEdit.id = data.answer.id;
+            }).error(function(data, status, headers, config) {
+        });
+    };
+
+    // Edit an answer (part2: when press on save button => update the data)
+    $scope.answerToEdit = {};
+    $scope.editAnswerSave = function(id) {
+        console.log('call editAnswerSave');
+        console.log('Update answer ' + id + '...');
+        $http
+            .post('/Answers/edit/' + id, $scope.answerToEdit)
+            .success(function(data, status, headers, config) {
+                console.log("Update done successfully");
+                $scope.loadAnswers();
+            }).error(function(data, status, headers, config) {
+            console.log("Something went wrong during update");
+        });
+    };
+
+
+    // Add an answer
+    $scope.answerToAdd = {};
+    $scope.addAnswer = function() {
+        console.log('call addAnswer');
+        $http
+            .post('/Questions/view/' + $routeParams['id'], $scope.answerToAdd)
+            .success(function(data, status, headers, config) {
+                $scope.answerToAdd = {};
+                $scope.loadAnswers();
+                console.log("call loadAnswers");
+            }).error(function(data, status, headers, config) {
+        });
+    };
+
+
+    // Delete an answer (part 1: Ask for confirmation)
+    $scope.answerToDelete = {};
+    $scope.deleteAnswerLoad = function(id) {
+        $http
+            .get('/Answers/view/' + id + '.json')
+            .success(function(data, status, headers, config) {
+                $scope.answerToDelete.message = data.answer.message;
+                $scope.answerToDelete.id = data.answer.id;
+            }).error(function(data, status, headers, config) {
+
+        });
+    };
+
+    // Delete a answer (part 2: Delete the answer)
+    $scope.deleteAnswerSave = function(id) {
+        console.log('call delAnswer');
+        console.log('Delete answer ' + id + '...');
+        $http
+            .delete('/Answers/delete/' + id)
+            .success(function(data, status, headers, config) {
+                $scope.loadAnswers();
+                console.log("call loadAnswers");
+            }).error(function(data, status, headers, config) {
+        });
+    };
+
+});

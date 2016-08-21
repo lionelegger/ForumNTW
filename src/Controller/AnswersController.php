@@ -116,6 +116,11 @@ class AnswersController extends AppController
 
     public function isAuthorized($user)
     {
+        // Admins peuvent effacer et éditer n'importe quelle réponse
+        if ($user['role'] == 'admin') {
+            return true;
+        }
+
         // Tous les utilisateurs enregistrés peuvent ajouter des Réponses
         if ($this->request->action === 'add' && $user['role'] != 'user') {
             return true;

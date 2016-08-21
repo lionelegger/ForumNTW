@@ -10,4 +10,5 @@ a.glyphicon-btn {
     cursor: pointer;
     cursor: hand;
 }
+h3 > button.pull-right {margin-top: -4px;}
 

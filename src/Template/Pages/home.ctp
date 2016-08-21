@@ -34,7 +34,7 @@ $this->layout = false;
     <?= $this->Html->script('angular-route.min.js') ?>
     <!--  Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <?= $this->Html->css('lionel.css') ?>
+    <?= $this->Html->css('custom.css') ?>
 </head>
 <?php if ($userSession = $this->request->session()->read('Auth.User')) ; ?>
 <body ng-app="myApp" ng-controller="MainCtrl">
@@ -55,8 +55,8 @@ $this->layout = false;
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">Link</a></li>
+                <li ng-class="{ active: isCurrentPath('/questions') }"><a href="#/questions">Questions <span class="sr-only">(current)</span></a></li>
+                <li ng-class="{ active: isCurrentPath('/search') }"><a href="#/search">Search</a></li>
             </ul>
 
             <?php if($userSession): ?>
@@ -82,7 +82,7 @@ $this->layout = false;
     </div><!-- /.container-fluid -->
 </nav>
 <div class="container">
-    <p>LOGIN ID = *<span ng-bind="currentUserId"></span>*</p>
+    <!--<p>LOGIN ID = *<span ng-bind="currentUserId"></span>*</p>-->
     <div ng-class="'alert alert-' + message().type" ng-show="message().show">
         <button type="button" class="close" ng-click="message().show = false">×</button>
         <msg key-expr="message().text"></msg>
@@ -97,6 +97,7 @@ $this->layout = false;
 <?= $this->Html->script('bootstrap.min.js') ?>
 <?= $this->Html->script('app.js') ?>
 <?= $this->Html->script('controllers.js') ?>
+<?= $this->Html->script('filters.js') ?>
 <script>window.onload = initialize;</script>
 </body>
 </html>

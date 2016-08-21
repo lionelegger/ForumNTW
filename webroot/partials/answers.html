@@ -1,0 +1,111 @@
+<div>
+    <ol class="breadcrumb">
+        <li><a href="#/questions">All questions</a></li>
+        <li class="active">Question {{question.id}}</li>
+    </ol>
+    <h1 class="page-header">{{question.title}}</h1>
+    <h2>{{question.body}}</h2>
+    <hr/>
+    <h3 class="page-header">
+        {{question.answers | objLength}} Answers
+        <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#addAnswerModal" ng-if="currentUserId">Add an answer</button>
+    </h3>
+    <p>
+        <!-- ADD ANSWERS modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="addAnswerModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Add an answer</h4>
+                    </div>
+                    <form method="post" accept-charset="utf-8" _lpchecked="1">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea name="message" class="form-control" required="required" id="message" rows="5" placeholder="Content" ng-model="answerToAdd.message"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="addQuestion" ng-click="addAnswer()" data-dismiss="modal">Add</button>
+                        </div>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <!-- EDIT ANSWER modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="editAnswerModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Edit an answer</h4>
+                    </div>
+                    <form method="post" accept-charset="utf-8" _lpchecked="1">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea name="message" class="form-control" required="required" id="editMessage" rows="5" ng-model="answerToEdit.message"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="editAnswerSave" ng-click="editAnswerSave(answerToEdit.id)" data-dismiss="modal">Save</button>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <!-- DELETE ANSWER modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="deleteAnswerModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Delete an answer</h4>
+                    </div>
+                    <form method="post" accept-charset="utf-8" _lpchecked="1">
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete the following answer?</p>
+                            <p>Answer ID : {{answerToDelete.id}}</p>
+                            <p>Answer Message : {{answerToDelete.message}}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="deleteAnswerSave" ng-click="deleteAnswerSave(answerToDelete.id)" data-dismiss="modal">Delete</button>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </p>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="25px">ID</th>
+            <th>AUTHOR</th>
+            <th>ANSWER</th>
+            <th>CREATED DATE</th>
+            <th width="50px"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="answer in answers">
+            <td>{{answer.id}}</td>
+            <td>{{answer.user.name}} - {{answer.user.id}} - {{answer.user.role}}</td>
+            <td>{{answer.message}}</td>
+
+            <td>{{answer.created|date:'short'}}</td>
+            <td>
+                <a class="glyphicon-btn" ng-click="editAnswerLoad(answer.id)" ng-show="currentUserId==answer.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#editAnswerModal"><i class="glyphicon glyphicon-pencil"></i></a>
+                <a class="glyphicon-btn" ng-click="deleteAnswerLoad(answer.id)" ng-show="currentUserId==answer.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#deleteAnswerModal"><i class="glyphicon glyphicon-remove-circle"></i></a>
+            </td>
+        </span>
+        </tbody>
+    </table>
+</div>
