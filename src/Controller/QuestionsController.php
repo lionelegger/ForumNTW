@@ -3,6 +3,10 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Event\Event;
+use Cake\ORM\Entity;
+use Cake\ORM\Table;
+use Cake\ORM\Query;
+use Cake\ORM\TableRegistry;
 
 /**
  * Questions Controller
@@ -13,7 +17,7 @@ class QuestionsController extends AppController
 {
 
     public function beforeFilter(Event $event){
-        $this->Auth->allow(['index', 'view']);
+        $this->Auth->allow(['index', 'view', 'search']);
     }
 
     public function initialize()
@@ -29,9 +33,17 @@ class QuestionsController extends AppController
      */
     public function index()
     {
+
+        /*$this->paginate = [
+            'contain' => ['Users', 'Answers' => function ($q) {
+                return $q->where(['Answers.id' => true]);
+            }]
+        ];*/
+
         $this->paginate = [
-            'contain' => ['Users']
+            'contain' => ['Users', 'Answers']
         ];
+
         $questions = $this->paginate($this->Questions);
 
         $this->set(compact('questions'));
@@ -160,6 +172,22 @@ class QuestionsController extends AppController
 
         return false;
 
-//        return parent::isAuthorized($user);
+//      return parent::isAuthorized($user);
+    }
+
+    // Search
+    public function search()
+    {
+        $searchTxt = '%'.$this->request->query('searchTxt').'%';
+        $questions = $this->Questions->find()->contain(['Users'])->where(['title LIKE' => $searchTxt])->orWhere(['body LIKE' => $searchTxt]);
+
+        $this->set(compact('questions'));
+        $this->set('_serialize', ['questions']);
+
+    }
+
+    // Getter for QuestionsTable
+    public function getQuestionsTable() {
+        return $this->Questions;
     }
 }

@@ -15,7 +15,7 @@ class UsersController extends AppController
 
     public function initialize() {
         parent::initialize();
-        $this->Auth->allow(['logout', 'register']);
+        $this->Auth->allow(['logout', 'add']);
     }
 
     /**
@@ -149,7 +149,9 @@ class UsersController extends AppController
             $user = $this->Auth->identify();
             if ($user) {
                 $this->Auth->setUser($user);
-                return $this->redirect($this->Auth->redirectUrl());
+                // return $this->redirect($this->Auth->redirectUrl());
+                // Todo: To be improved.... hardcoded...
+                return $this->redirect($this->Auth->redirectUrl("/#/questions"));
             }
             $this->Flash->error(__('Invalid username or password, try again'));
         }

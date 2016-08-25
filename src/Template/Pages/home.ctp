@@ -21,6 +21,15 @@ use Cake\Network\Exception\NotFoundException;
 
 $this->layout = false;
 
+/*switch (URL) {
+    case "question":
+        $this->_config['loginRedirect'] = "/#/questions";
+        break;
+    case "search":
+        $this->_config['loginRedirect'] = "/#/search";
+        break;
+}*/
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -62,7 +71,10 @@ $this->layout = false;
             <?php if($userSession): ?>
                 <span class="hidden" id="userId" data-id="<?= $userSession['id'] ?>"></span>
                 <form class="navbar-form navbar-right">
-                    <button type="button" class="btn btn-default"><?= $this->Html->link(__('Logout'), ['controller' => 'Users', 'action' => 'logout']) ?></button>
+                    <button type="button" class="btn btn-default">
+                        <!-- Todo: link on btn btn-default -->
+                        <?= $this->Html->link(__('Logout'), ['controller' => 'Users', 'action' => 'logout']) ?>
+                    </button>
                 </form>
                 <p class="navbar-text navbar-right">Welcome <?= $userSession['name'] ?></p>
             <?php else: ?>
@@ -75,12 +87,53 @@ $this->layout = false;
                         <input type="password" name="password" class="form-control" id="password" placeholder="Password">
                     </div>
                     <button type="submit" class="btn btn-primary">Login</button>&nbsp;
-                    <button type="button" class="btn btn-link pull-right"><?= $this->Html->link(__('Register'), ['controller' => 'Users', 'action' => 'register']) ?></button>
+                    <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#addUserModal">Register</button>
                 </form>
             <?php endif; ?>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+
+<!-- ADD USER modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="addUserModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Register a new user</h4>
+            </div>
+            <form method="post" accept-charset="utf-8" _lpchecked="1">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" class="form-control" id="email" placeholder="Email" ng-model="userToAdd.email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Password" ng-model="userToAdd.password">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input name="name" type="text" class="form-control" id="name" placeholder="Name" ng-model="userToAdd.name">
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select name="role" class="form-control" id="role" ng-model="userToAdd.role">
+                            <option value="admin">Admin</option>
+                            <option value="author" selected>Author</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="addUser" ng-click="addUser()" data-dismiss="modal">Add</button>
+                </div>
+            </div>
+        </form>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <div class="container">
     <!--<p>LOGIN ID = *<span ng-bind="currentUserId"></span>*</p>-->
     <div ng-class="'alert alert-' + message().type" ng-show="message().show">

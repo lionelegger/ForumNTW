@@ -19,37 +19,50 @@ as.controller('MainCtrl', function($scope, $http, $location) {
         console.log("call loadQuestion");
     };
 
-
     $scope.isCurrentPath = function (path) {
         return $location.path() == path;
     };
 
-});
-
-
-as.controller('LoginCtrl', function($scope, $rootScope, $http) {
-    $scope.login = {};
-    $scope.submitLogin = function() {
-        console.log('call login');
-        $http.post('/Users/login', $scope.login)
+    // To add a new user (Register)
+    $scope.$userToAdd = {};
+    $scope.addUser = function() {
+        console.log('call addUser');
+        $http
+            .post('/Users/add', $scope.$userToAdd)
             .success(function(data, status, headers, config) {
-                console.log("logged!");
+                console.log($scope.userToAdd);
+                console.log("New user registered");
+                $scope.userToAdd = {};
             }).error(function(data, status, headers, config) {
-                $scope.loginErrorMsg = "<div class='text-danger'>An error occurred...</div>";
         });
-    }
+    };
+
 });
 
 as.controller('QuestionsCtrl', function($scope, $rootScope, $http) {
     console.log('call QuestionsCtrl');
-
     // Load the list of questions
     $scope.loadQuestions = function() {
         console.log('call loadQuestions');
         $http.get('/questions.json')
-            .success(function(data, status, headers, config) {
+            .success(function(data) {
                 $scope.questions = data.questions;
-                console.log("Questions loaded!");
+
+                // The following code adds all the answers in the question list
+                /*
+                var questionsList = data.questions;
+                var questions = [];
+                for (var i=0; i < questionsList.length; i++) {
+                    $http.get('/questions/'+questionsList[i].id+'.json').success(function(data) {
+                        // success
+                        questions.push(data.question);
+                    }).error(function(data, status, headers, config) {
+                        // error
+                    });
+                }
+                $scope.questions = questions;
+                console.log(questions);
+                */
             }).error(function(data, status, headers, config) {
         });
     };
@@ -174,7 +187,6 @@ as.controller('AnswersCtrl', function($scope, $rootScope, $http, $routeParams) {
         });
     };
 
-
     // Add an answer
     $scope.answerToAdd = {};
     $scope.addAnswer = function() {
@@ -216,4 +228,37 @@ as.controller('AnswersCtrl', function($scope, $rootScope, $http, $routeParams) {
         });
     };
 
+});
+
+as.controller('SearchCtrl', function($scope, $rootScope, $http, $routeParams) {
+    console.log('call SearchCtrl');
+    // Load the list of answers
+    $scope.search = function() {
+        console.log("button answers = " + $scope.inAnswers)
+        console.log('call search for text : ' + $scope.searchTxt);
+
+        // Search in Answers only (=> the question has to show also)
+        if ($scope.inAnswers){
+            $http.get('/Answers/search.json?searchTxt=' + $scope.searchTxt)
+            // $http.get('/Search?searchTxt=' + $scope.searchTxt)
+                .success(function(data, status, headers, config) {
+                    $scope.answers = data.answers;
+                    console.log($scope.answers);
+                    console.log("Answers loaded!");
+                }).error(function(data, status, headers, config) {
+            });
+        }
+
+        // Search in Questions only (=> the answers do not show)
+        if ($scope.inQuestions){
+            $http.get('/Questions/search.json?searchTxt=' + $scope.searchTxt)
+                .success(function(data) {
+                    $scope.questions = data.questions;
+                    console.log($scope.questions);
+                    console.log("Questions loaded!");
+                }).error(function(data, status, headers, config) {
+            });
+        }
+
+    };
 });

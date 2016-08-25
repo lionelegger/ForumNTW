@@ -2,6 +2,11 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
+use Cake\ORM\Entity;
+use Cake\ORM\Table;
+use Cake\ORM\Query;
+use Cake\ORM\TableRegistry;
 
 /**
  * Answers Controller
@@ -10,6 +15,9 @@ use App\Controller\AppController;
  */
 class AnswersController extends AppController
 {
+    public function beforeFilter(Event $event){
+        $this->Auth->allow(['index', 'view', 'countAnswers', 'search']);
+    }
 
     /**
      * Index method
@@ -26,6 +34,39 @@ class AnswersController extends AppController
         $this->set(compact('answers'));
         $this->set('_serialize', ['answers']);
     }
+
+
+    /**
+     * countAnswers method
+     *
+     * @param string|null $question_id Question id.
+     * @return \Cake\Network\Response|null
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    // This function returns the number of answers of a specific question
+    public function countAnswers($question_id = null)
+    {
+        $query = $this->Answers->find();
+        $query->where(['question_id' => $question_id]);
+        $nbAnswers = $query->count();
+
+        $this->set(compact('nbAnswers'));
+        $this->set('_serialize', ['nbAnswers']);
+
+    }
+
+    // Search
+    public function search()
+    {
+       $searchTxt = '%'.$this->request->query('searchTxt').'%';
+       $answers = $this->Answers->find()->contain(['Questions', 'Users'])->where(['message LIKE' => $searchTxt]);
+
+        $this->set(compact('answers'));
+        $this->set('_serialize', ['answers']);
+
+    }
+
+
 
     /**
      * View method
@@ -137,5 +178,10 @@ class AnswersController extends AppController
         return false;
 
 //        return parent::isAuthorized($user);
+    }
+
+    // Getter for AnswersTable
+    public function getAnswersTable() {
+        return $this->Answers;
     }
 }

@@ -1,13 +1,30 @@
 <div>
-    <ol class="breadcrumb">
-        <li><a href="#/questions">All questions</a></li>
-        <li class="active">Question {{question.id}}</li>
-    </ol>
+    <div class="row">
+        <div class="col-md-6">
+            <ol class="breadcrumb">
+                <li class="active"><a href="#/questions">All questions</a></li>
+                <li class="active">Question {{question.id}}</li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+            <form class="form-inline pull-right">
+                <div class="col-lg-12">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Filter ..." ng-model="searchTitle">
+                        <span class="input-group-btn">
+                    <button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-filter"></span></button>
+                </span>
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+            </form>
+        </div>
+    </div>
+
     <h1 class="page-header">{{question.title}}</h1>
     <h2>{{question.body}}</h2>
     <hr/>
     <h3 class="page-header">
-        {{question.answers | objLength}} Answers
+        {{question.answers.length}} Answers
         <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#addAnswerModal" ng-if="currentUserId">Add an answer</button>
     </h3>
     <p>
@@ -28,7 +45,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary" id="addQuestion" ng-click="addAnswer()" data-dismiss="modal">Add</button>
+                            <button type="submit" class="btn btn-primary" id="addAnswer" ng-click="addAnswer()" data-dismiss="modal">Add</button>
                         </div>
                         </div>
                     </form>
@@ -95,7 +112,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="answer in answers">
+        <tr ng-repeat="answer in answers | filter:searchTitle">
             <td>{{answer.id}}</td>
             <td>{{answer.user.name}} - {{answer.user.id}} - {{answer.user.role}}</td>
             <td>{{answer.message}}</td>
@@ -105,7 +122,7 @@
                 <a class="glyphicon-btn" ng-click="editAnswerLoad(answer.id)" ng-show="currentUserId==answer.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#editAnswerModal"><i class="glyphicon glyphicon-pencil"></i></a>
                 <a class="glyphicon-btn" ng-click="deleteAnswerLoad(answer.id)" ng-show="currentUserId==answer.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#deleteAnswerModal"><i class="glyphicon glyphicon-remove-circle"></i></a>
             </td>
-        </span>
+        </tr>
         </tbody>
     </table>
 </div>

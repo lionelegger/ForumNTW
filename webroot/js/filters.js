@@ -7,16 +7,3 @@ as.filter("sanitize", ["$sce", function($sce) {
     }
 }]);
 
-/**
- * Filter to calculate the number of items in an object
- */
-as.filter('objLength', function() {
-    return function(object) {
-        var count = 0;
-
-        for(var i in object){
-            count++;
-        }
-        return count;
-    }
-});
