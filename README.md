@@ -60,6 +60,7 @@ CREATE TABLE questions(
   body TEXT NOT NULL,
   created DATETIME DEFAULT NULL,
   modified DATETIME DEFAULT NULL,
+  answers_count INT NOT NULL,
   FOREIGN KEY user_key(user_id) REFERENCES users(id)
 );
 ```

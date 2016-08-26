@@ -123,16 +123,8 @@
             <td>{{question.title}}</td>
             <td>
                 {{question.body}}
-                <!--TO show also all the answers of the specific question-->
-                <!--
-                <hr>
-                <div ng-repeat="answer in question.answers">
-                    <p ng-bind="answer.message"></p>
-                </div>
-                -->
             </td>
-            <!-- TODO: Add the number of answers -->
-            <td><a href="#/questions/{{question.id}}">See answers</a></td>
+            <td><a href="#/questions/{{question.id}}">{{question.answers_count}} answers</a></td>
             <td>{{question.created|date:'short'}}</td>
             <td>
                 <a class="glyphicon-btn" ng-click="editQuestionLoad(question.id)" ng-show="currentUserId==question.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#editQuestionModal"><i class="glyphicon glyphicon-pencil"></i></a>

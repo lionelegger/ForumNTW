@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Behavior\CounterCacheBehavior;
 
 /**
  * Answers Model
@@ -48,6 +49,13 @@ class AnswersTable extends Table
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
+        ]);
+
+        // LIONEL : Added CounterCache to store number of answers in a question in answers_count
+        // The field answers_count has been added in the questions table also
+        // (http://book.cakephp.org/3.0/en/orm/behaviors/counter-cache.html)
+        $this->addBehavior('CounterCache', [
+            'Questions' => ['answers_count']
         ]);
     }
 

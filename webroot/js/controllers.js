@@ -47,22 +47,6 @@ as.controller('QuestionsCtrl', function($scope, $rootScope, $http) {
         $http.get('/questions.json')
             .success(function(data) {
                 $scope.questions = data.questions;
-
-                // The following code adds all the answers in the question list
-                /*
-                var questionsList = data.questions;
-                var questions = [];
-                for (var i=0; i < questionsList.length; i++) {
-                    $http.get('/questions/'+questionsList[i].id+'.json').success(function(data) {
-                        // success
-                        questions.push(data.question);
-                    }).error(function(data, status, headers, config) {
-                        // error
-                    });
-                }
-                $scope.questions = questions;
-                console.log(questions);
-                */
             }).error(function(data, status, headers, config) {
         });
     };

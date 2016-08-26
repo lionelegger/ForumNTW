@@ -33,22 +33,10 @@ class QuestionsController extends AppController
      */
     public function index()
     {
-
-        /*$this->paginate = [
-            'contain' => ['Users', 'Answers' => function ($q) {
-                return $q->where(['Answers.id' => true]);
-            }]
-        ];*/
-
-        $this->paginate = [
-            'contain' => ['Users', 'Answers']
-        ];
-
+        $this->paginate = ['contain' => ['Users']];
         $questions = $this->paginate($this->Questions);
-
         $this->set(compact('questions'));
         $this->set('_serialize', ['questions']);
-
     }
 
     /**
