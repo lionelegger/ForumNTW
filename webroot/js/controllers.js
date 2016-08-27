@@ -211,13 +211,13 @@ as.controller('AnswersCtrl', function($scope, $rootScope, $http, $routeParams) {
             }).error(function(data, status, headers, config) {
         });
     };
-
 });
 
 as.controller('SearchCtrl', function($scope, $rootScope, $http, $routeParams) {
     console.log('call SearchCtrl');
     // Load the list of answers
     $scope.search = function() {
+        console.log("button questions = " + $scope.inQuestions)
         console.log("button answers = " + $scope.inAnswers)
         console.log('call search for text : ' + $scope.searchTxt);
 
@@ -243,6 +243,5 @@ as.controller('SearchCtrl', function($scope, $rootScope, $http, $routeParams) {
                 }).error(function(data, status, headers, config) {
             });
         }
-
     };
 });

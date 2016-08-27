@@ -1,33 +1,4 @@
 <div>
-    <div class="row">
-        <div class="col-md-6">
-            <ol class="breadcrumb">
-                <li class="active"><a href="#/questions">All questions</a></li>
-                <li class="active">Q{{question.id}} : {{question.title}}</li>
-            </ol>
-        </div>
-        <div class="col-md-6">
-            <form class="form-inline pull-right">
-                <div class="col-lg-12">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Filter ..." ng-model="searchTitle">
-                        <span class="input-group-btn">
-                    <button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-filter"></span></button>
-                </span>
-                    </div><!-- /input-group -->
-                </div><!-- /.col-lg-6 -->
-            </form>
-        </div>
-    </div>
-
-    <h1 class="page-header">{{question.title}}</h1>
-    <h2>{{question.body}}</h2>
-    <hr/>
-    <h3 class="page-header">
-        {{question.answers.length}} Answers
-        <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#addAnswerModal" ng-if="currentUserId">Add an answer</button>
-    </h3>
-    <p>
         <!-- ADD ANSWERS modal -->
         <div class="modal fade" tabindex="-1" role="dialog" id="addAnswerModal">
             <div class="modal-dialog">
@@ -99,30 +70,46 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-    </p>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th width="25px">ID</th>
-            <th>AUTHOR</th>
-            <th>ANSWER</th>
-            <th>CREATED DATE</th>
-            <th width="50px"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="answer in answers | filter:searchTitle">
-            <td>{{answer.id}}</td>
-            <td>{{answer.user.name}} - {{answer.user.id}} - {{answer.user.role}}</td>
-            <td>{{answer.message}}</td>
+    <div class="question">
+        <ul class="list-inline text-muted pull-right small">
+            <li class="list-inline-item hidden">{{question.id}}</li>
+            <li class="list-inline-item"><span class="glyphicon glyphicon-user"></span>&nbsp;Posted by <strong>{{question.user.name}}</strong></li>
+            <li class="list-inline-item"><span class="glyphicon glyphicon-time"></span>&nbsp;{{question.created|date:'short'}}</li>
+        </ul>
+        <h2>{{question.title}}</h2>
+        <h3>{{question.body}}</h3>
+    </div>
 
-            <td>{{answer.created|date:'short'}}</td>
-            <td>
-                <a class="glyphicon-btn" ng-click="editAnswerLoad(answer.id)" ng-show="currentUserId==answer.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#editAnswerModal"><i class="glyphicon glyphicon-pencil"></i></a>
-                <a class="glyphicon-btn" ng-click="deleteAnswerLoad(answer.id)" ng-show="currentUserId==answer.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#deleteAnswerModal"><i class="glyphicon glyphicon-remove-circle"></i></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <h1 class="page-header clearfix">{{question.answers.length}} Answers
+        <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#addAnswerModal" ng-if="currentUserId"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add an answer</button>
+        <form class="form-inline pull-right clearfix">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Filter in answers..." ng-model="searchTitle">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-filter"></span></button>
+                    </span>
+                </div><!-- /input-group -->
+            </div><!-- /.col-lg-6 -->
+        </form>
+    </h1>
+
+    <div class="answer row" ng-repeat="answer in answers | filter:searchTitle">
+        <div class="col-md-8 mainContent">
+            <p>{{answer.message}}</p>
+        </div>
+        <div class="col-md-3 col-md-offset-1 action text-right">
+            <ul class="list-inline text-muted small">
+                <li class="list-inline-item hidden">{{question.id}}</li>
+                <li class="list-inline-item"><span class="glyphicon glyphicon-user"></span>&nbsp;Posted by <strong>{{answer.user.name}}</strong></li>
+                <li class="list-inline-item"><span class="glyphicon glyphicon-time"></span>&nbsp;{{answer.created|date:'short'}}</li>
+            </ul>
+            <div class="action" ng-if="currentUserId">
+                <button type="button" class="btn btn-default btn-sm" ng-click="editAnswerLoad(answer.id)" ng-show="currentUserId==answer.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#editAnswerModal"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit</button>
+                <button type="button" class="btn btn-default btn-sm" ng-click="deleteAnswerLoad(answer.id)" ng-show="currentUserId==answer.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#deleteAnswerModal"><span class="glyphicon glyphicon-remove"></span>&nbsp;Delete</button>
+            </div>
+        </div>
+    </div>
+
 </div>

@@ -49,7 +49,7 @@ $this->layout = false;
 <body ng-app="myApp" ng-controller="MainCtrl">
 
 <nav class="navbar navbar-default">
-    <div class="container-fluid">
+    <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -133,6 +133,7 @@ $this->layout = false;
     </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
 
 <div class="container">
     <!--<p>LOGIN ID = *<span ng-bind="currentUserId"></span>*</p>-->

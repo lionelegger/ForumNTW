@@ -1,69 +1,77 @@
 <h1>Search</h1>
 <div class="row">
-    <form id="searchForm" ng-submit="search()">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search for..." id="searchTxt" ng-model="searchTxt" name="searchTxt">
-            <span class="input-group-btn">
+
+    <div class="col-md-4 clearfix">
+        <form id="searchForm form-inline" ng-submit="search()">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for..." id="searchTxt" ng-model="searchTxt" name="searchTxt">
+                <span class="input-group-btn">
                 <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search"></span> Search</button>
-            </span>
-        </div><!-- /input-group -->
-        <div class="checkbox">
-            <label><input type="checkbox" checked id="inQuestions" name="inQuestions" ng-model="inQuestions"> in questions</label>
-        </div>
-        <div class="checkbox">
-            <label><input type="checkbox" id="inAnswers" name="inAnswers" ng-model="inAnswers"> in answers</label>
-        </div>
-    </form>
+            </div><!-- /input-group -->
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="checkbox">
+                        <label><input type="checkbox" checked id="inQuestions" name="inQuestions" ng-model="inQuestions" checked> in questions</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="checkbox">
+                        <label><input type="checkbox" id="inAnswers" name="inAnswers" ng-model="inAnswers"> in answers</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
 </div>
 
 <div id="results" class="row">
 
-    <!-- Results only in Answers-->
-    <table class="table" ng-if="inAnswers">
-        <thead>
-        <tr>
-            <th width="25px">Q ID</th>
-            <th>Q TITLE</th>
-            <th>Q BODY</th>
-            <th>A ID</th>
-            <th>ANSWER</th>
-            <th>A AUTHOR</th>
-            <th>CREATED DATE</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="answer in answers" ng-if="inAnswers">
-            <td>{{answer.question.id}}</td>
-            <td>{{answer.question.title}}</td>
-            <td>Q: {{answer.question.body}}</td>
-            <td>{{answer.id}}</td>
-            <td>A: {{answer.message}}</td>
-            <td>{{answer.user.name}} - {{answer.user.id}} - {{answer.user.role}}</td>
-            <td>{{answer.created|date:'short'}}</td>
-        </tr>
-        </tbody>
-    </table>
-
     <!-- Results only in Questions-->
-    <table class="table" ng-if="inQuestions">
-        <thead>
-        <tr>
-            <th width="25px">Q ID</th>
-            <th>Q TITLE</th>
-            <th>Q BODY</th>
-            <th>Q AUTHOR</th>
-            <th>CREATED DATE</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="question in questions" ng-if="inQuestions">
-            <td>{{question.id}}</td>
-            <td>{{question.title}}</td>
-            <td>Q: {{question.body}}</td>
-            <td>{{question.user.name}} - {{question.user.id}} - {{question.user.role}}</td>
-            <td>{{question.created|date:'short'}}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="question row" ng-repeat="question in questions" ng-if="inQuestions">
+        <div class="col-md-8 mainContent">
+            <h4>{{question.title}}</h4>
+            <p>{{question.body}}</p>
+        </div>
+        <div class="col-md-3 col-md-offset-1 action text-right">
+            <ul class="list-inline text-muted small">
+                <li class="list-inline-item hidden">{{question.id}}</li>
+                <li class="list-inline-item"><span class="glyphicon glyphicon-user"></span>&nbsp;Posted by <strong>{{question.user.name}}</strong></li>
+                <li class="list-inline-item"><span class="glyphicon glyphicon-time"></span>&nbsp;{{question.created|date:'short'}}</li>
+            </ul>
+            <h4><a href="#/questions/{{question.id}}">{{question.answers_count}} answers</a></h4>
+        </div>
+    </div>
+
+    <!-- Results in Answers-->
+
+    <div class="answer row" ng-repeat="answer in answers" ng-if="inAnswers">
+
+        <div class="question row">
+            <div class="col-md-8 mainContent">
+                <h4>{{answer.question.title}}</h4>
+                <p>{{answer.question.body}}</p>
+            </div>
+            <div class="col-md-3 col-md-offset-1 action text-right">
+                <ul class="list-inline text-muted small">
+                    <li class="list-inline-item hidden">{{answer.question.id}}</li>
+                    <li class="list-inline-item"><span class="glyphicon glyphicon-user"></span>&nbsp;Posted by <strong>{{answer.question.user.name}}</strong></li>
+                    <li class="list-inline-item"><span class="glyphicon glyphicon-time"></span>&nbsp;{{answer.question.created|date:'short'}}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-8 mainContent">
+            <p>{{answer.message}}</p>
+        </div>
+        <div class="col-md-3 col-md-offset-1 action text-right">
+            <ul class="list-inline text-muted small">
+                <li class="list-inline-item hidden">{{question.id}}</li>
+                <li class="list-inline-item"><span class="glyphicon glyphicon-user"></span>&nbsp;Posted by <strong>{{answer.user.name}}</strong></li>
+                <li class="list-inline-item"><span class="glyphicon glyphicon-time"></span>&nbsp;{{answer.created|date:'short'}}</li>
+            </ul>
+        </div>
+    </div>
+
 </div>
 

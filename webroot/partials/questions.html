@@ -1,28 +1,4 @@
 <div>
-    <div class="row">
-        <div class="col-md-6">
-            <ol class="breadcrumb">
-                <li class="active">All questions</li>
-            </ol>
-        </div>
-        <div class="col-md-6">
-            <form class="form-inline pull-right">
-                <div class="col-lg-12">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Filter ..." ng-model="searchTitle">
-                        <span class="input-group-btn">
-                    <button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-filter"></span></button>
-                </span>
-                    </div><!-- /input-group -->
-                </div><!-- /.col-lg-6 -->
-            </form>
-        </div>
-    </div>
-
-    <h3 class="page-header">{{questions.length}} Questions
-        <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#addQuestionModal" ng-if="currentUserId">Add a question</button>
-    </h3>
-    <p>
         <!-- ADD QUESTION modal -->
         <div class="modal fade" tabindex="-1" role="dialog" id="addQuestionModal">
             <div class="modal-dialog">
@@ -44,7 +20,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary" id="addQuestion" ng-click="addQuestion()" data-dismiss="modal">Add</button>
+                            <button type="submit" class="btn btn-primary" id="addQuestion" ng-click="addQuestion()" data-dismiss="modal"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add</button>
                         </div>
                         </div>
                     </form>
@@ -58,7 +34,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Edit a question</h4>
+                        <h4 class="modal-title">Edit your question</h4>
                     </div>
                     <form method="post" accept-charset="utf-8" _lpchecked="1">
                         <div class="modal-body">
@@ -73,7 +49,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary" id="editQuestionSave" ng-click="editQuestionSave(questionToEdit.id)" data-dismiss="modal">Save</button>
+                            <button type="submit" class="btn btn-primary" id="editQuestionSave" ng-click="editQuestionSave(questionToEdit.id)" data-dismiss="modal"><span class="glyphicon glyphicon-ok"></span>&nbsp;Save</button>
                         </div>
                     </form>
                 </div><!-- /.modal-content -->
@@ -97,14 +73,49 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary" id="deleteQuestionSave" ng-click="deleteQuestionSave(questionToDelete.id)" data-dismiss="modal">Delete</button>
+                            <button type="submit" class="btn btn-primary" id="deleteQuestionSave" ng-click="deleteQuestionSave(questionToDelete.id)" data-dismiss="modal"><span class="glyphicon glyphicon-trash"></span>&nbsp;Delete</button>
                         </div>
                     </form>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-    </p>
-    <table class="table">
+
+
+    <h1 class="page-header clearfix">{{questions.length}} Questions
+        <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#addQuestionModal" ng-if="currentUserId"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add a question</button>
+        <form class="form-inline pull-right clearfix">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Filter in questions..." ng-model="searchTitle">
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-filter"></span></button>
+                </span>
+                </div><!-- /input-group -->
+            </div><!-- /.col-lg-6 -->
+        </form>
+    </h1>
+
+    <div class="question row" ng-repeat="question in questions | filter:searchTitle">
+        <div class="col-md-8 mainContent">
+            <h4>{{question.title}}</h4>
+            <p>{{question.body}}</p>
+        </div>
+        <div class="col-md-3 col-md-offset-1 action text-right">
+            <ul class="list-inline text-muted small">
+                <li class="list-inline-item hidden">{{question.id}}</li>
+                <li class="list-inline-item"><span class="glyphicon glyphicon-user"></span>&nbsp;Posted by <strong>{{question.user.name}}</strong></li>
+                <li class="list-inline-item"><span class="glyphicon glyphicon-time"></span>&nbsp;{{question.created|date:'short'}}</li>
+            </ul>
+            <div class="action" ng-if="currentUserId">
+                <button type="button" class="btn btn-default btn-sm" ng-click="editQuestionLoad(question.id)" ng-show="currentUserId==question.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#editQuestionModal"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit</button>
+                <button type="button" class="btn btn-default btn-sm" ng-click="deleteQuestionLoad(question.id)" ng-show="currentUserId==question.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#deleteQuestionModal"><span class="glyphicon glyphicon-remove"></span>&nbsp;Delete</button>
+            </div>
+            <h4><a href="#/questions/{{question.id}}">{{question.answers_count}} answers</a></h4>
+        </div>
+    </div>
+
+
+    <!--<table class="table">
         <thead>
         <tr>
             <th width="25px">ID</th>
@@ -113,7 +124,7 @@
             <th>CONTENT</th>
             <th>ANSWERS</th>
             <th>CREATED DATE</th>
-            <th width="50px">ACTIONS</th>
+            <th width="50px" ng-if="currentUserId">ACTIONS</th>
         </tr>
         </thead>
         <tbody>
@@ -126,11 +137,13 @@
             </td>
             <td><a href="#/questions/{{question.id}}">{{question.answers_count}} answers</a></td>
             <td>{{question.created|date:'short'}}</td>
-            <td>
+            <td ng-if="currentUserId">
                 <a class="glyphicon-btn" ng-click="editQuestionLoad(question.id)" ng-show="currentUserId==question.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#editQuestionModal"><i class="glyphicon glyphicon-pencil"></i></a>
                 <a class="glyphicon-btn" ng-click="deleteQuestionLoad(question.id)" ng-show="currentUserId==question.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#deleteQuestionModal"><i class="glyphicon glyphicon-remove-circle"></i></a>
             </td>
         </tr>
         </tbody>
-    </table>
+    </table>-->
+
+
 </div>
