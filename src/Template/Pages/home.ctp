@@ -42,13 +42,14 @@ $this->layout = false;
     <?= $this->Html->script('angular.js') ?>
     <?= $this->Html->script('angular-route.min.js') ?>
     <!--  Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
+    <?= $this->Html->css('bootstrap.min.css') ?>
     <?= $this->Html->css('custom.css') ?>
 </head>
 <?php if ($userSession = $this->request->session()->read('Auth.User')) ; ?>
 <body ng-app="myApp" ng-controller="MainCtrl">
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">

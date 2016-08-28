@@ -10,7 +10,7 @@
                     <form method="post" accept-charset="utf-8" _lpchecked="1">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="message">Message</label>
+                                <!--<label for="message">Answer</label>-->
                                 <textarea name="message" class="form-control" required="required" id="message" rows="5" placeholder="Content" ng-model="answerToAdd.message"></textarea>
                             </div>
                         </div>
@@ -35,7 +35,7 @@
                     <form method="post" accept-charset="utf-8" _lpchecked="1">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="message">Message</label>
+                                <!--<label for="message">Answer</label>-->
                                 <textarea name="message" class="form-control" required="required" id="editMessage" rows="5" ng-model="answerToEdit.message"></textarea>
                             </div>
                         </div>
@@ -54,13 +54,11 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Delete an answer</h4>
+                        <h4 class="modal-title">Are you sure you want to delete the following answer?</h4>
                     </div>
                     <form method="post" accept-charset="utf-8" _lpchecked="1">
                         <div class="modal-body">
-                            <p>Are you sure you want to delete the following answer?</p>
-                            <p>Answer ID : {{answerToDelete.id}}</p>
-                            <p>Answer Message : {{answerToDelete.message}}</p>
+                            <p class="answer-message">{{answerToDelete.message}}</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -71,43 +69,60 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
-    <div class="question">
-        <ul class="list-inline text-muted pull-right small">
-            <li class="list-inline-item hidden">{{question.id}}</li>
-            <li class="list-inline-item"><span class="glyphicon glyphicon-user"></span>&nbsp;Posted by <strong>{{question.user.name}}</strong></li>
-            <li class="list-inline-item"><span class="glyphicon glyphicon-time"></span>&nbsp;{{question.created|date:'short'}}</li>
-        </ul>
-        <h2>{{question.title}}</h2>
-        <h3>{{question.body}}</h3>
-    </div>
-
-    <h1 class="page-header clearfix">{{question.answers.length}} Answers
-        <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#addAnswerModal" ng-if="currentUserId"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add an answer</button>
-        <form class="form-inline pull-right clearfix">
-            <div class="col-lg-12">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Filter in answers..." ng-model="searchTitle">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-filter"></span></button>
-                    </span>
-                </div><!-- /input-group -->
-            </div><!-- /.col-lg-6 -->
-        </form>
-    </h1>
-
-    <div class="answer row" ng-repeat="answer in answers | filter:searchTitle">
-        <div class="col-md-8 mainContent">
-            <p>{{answer.message}}</p>
+    <div class="box">
+        <div class="row highlight">
+            <div class="question clearfix">
+                <div class="col-md-9">
+                    <h2 class="question-title">{{question.title}}</h2>
+                    <h3 class="question-body">{{question.body}}</h3>
+                </div>
+                <div class="col-md-2 col-md-offset-1">
+                    <ul class="list-inline text-muted pull-right small">
+                        <li class="list-inline-item hidden">{{question.id}}</li>
+                        <li class="list-inline-item"><span class="glyphicon glyphicon-user"></span>&nbsp;Posted by <strong>{{question.user.name}}</strong></li>
+                        <li class="list-inline-item"><span class="glyphicon glyphicon-time"></span>&nbsp;{{question.created|date:'short'}}</li>
+                    </ul>
+                </div>
+            </div>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <div class="navbar-brand">{{question.answers.length}} Answers</div>
+                    </div>
+                    <div class="navbar-form clearfix">
+                        <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#addAnswerModal" ng-if="currentUserId"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add an answer</button>
+                        <form class="form-inline pull-right clearfix">
+                            <div class="col-lg-12">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Filter in answers..." ng-model="searchTitle">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-filter"></span></button>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </div><!-- /.col-lg-6 -->
+                        </form>
+                    </div>
+                </div>
+            </nav>
         </div>
-        <div class="col-md-3 col-md-offset-1 action text-right">
-            <ul class="list-inline text-muted small">
-                <li class="list-inline-item hidden">{{question.id}}</li>
-                <li class="list-inline-item"><span class="glyphicon glyphicon-user"></span>&nbsp;Posted by <strong>{{answer.user.name}}</strong></li>
-                <li class="list-inline-item"><span class="glyphicon glyphicon-time"></span>&nbsp;{{answer.created|date:'short'}}</li>
-            </ul>
-            <div class="action" ng-if="currentUserId">
-                <button type="button" class="btn btn-default btn-sm" ng-click="editAnswerLoad(answer.id)" ng-show="currentUserId==answer.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#editAnswerModal"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit</button>
-                <button type="button" class="btn btn-default btn-sm" ng-click="deleteAnswerLoad(answer.id)" ng-show="currentUserId==answer.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#deleteAnswerModal"><span class="glyphicon glyphicon-remove"></span>&nbsp;Delete</button>
+
+        <div class="row" ng-repeat="answer in answers | filter:searchTitle">
+            <div class="answer clearfix">
+                <div class="col-md-9">
+                    <div class="answer-message">{{answer.message}}</div>
+                </div>
+                <div class="col-md-2 col-md-offset-1 action text-right">
+                    <ul class="list-unstyled text-muted small">
+                        <li class="hidden">{{question.id}}</li>
+                        <li><span class="glyphicon glyphicon-user"></span>&nbsp;Posted by <strong>{{answer.user.name}}</strong></li>
+                        <li><span class="glyphicon glyphicon-time"></span>&nbsp;{{answer.created|date:'short'}}</li>
+                    </ul>
+                    <div class="action" ng-if="currentUserId">
+                        <button type="button" class="btn btn-default btn-sm" ng-click="editAnswerLoad(answer.id)" ng-show="currentUserId==answer.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#editAnswerModal"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit</button>
+                        <button type="button" class="btn btn-default btn-sm" ng-click="deleteAnswerLoad(answer.id)" ng-show="currentUserId==answer.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#deleteAnswerModal"><span class="glyphicon glyphicon-remove"></span>&nbsp;Delete</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
