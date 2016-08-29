@@ -33,8 +33,14 @@ class QuestionsController extends AppController
      */
     public function index()
     {
-        $this->paginate = ['contain' => ['Users']];
-        $questions = $this->paginate($this->Questions);
+        // With pagination
+        // $this->paginate = ['contain' => ['Users']];
+        // $questions = $this->paginate($this->Questions);
+
+        // Without pagination (get Users)
+        $questions = $this->Questions->find('all')->contain(['Users']);
+
+        // Create .json
         $this->set(compact('questions'));
         $this->set('_serialize', ['questions']);
     }
@@ -145,7 +151,7 @@ class QuestionsController extends AppController
             return true;
         }
 
-        // Tous les utilisateurs enregistrés peuvent ajouter des articles
+        // Tous les utilisateurs enregistrés peuvent ajouter des questions
         if ($this->request->action === 'add' && $user['role'] != 'user') {
             return true;
         }
@@ -174,8 +180,4 @@ class QuestionsController extends AppController
 
     }
 
-    // Getter for QuestionsTable
-    public function getQuestionsTable() {
-        return $this->Questions;
-    }
 }

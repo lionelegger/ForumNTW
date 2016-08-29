@@ -214,6 +214,9 @@ as.controller('AnswersCtrl', function($scope, $rootScope, $http, $routeParams) {
 });
 
 as.controller('SearchCtrl', function($scope, $rootScope, $http, $routeParams) {
+    // by default search in Questions
+    //$scope.inQuestions=true;
+
     console.log('call SearchCtrl');
     // Load the list of answers
     $scope.search = function() {

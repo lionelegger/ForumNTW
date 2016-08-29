@@ -26,11 +26,14 @@ class AnswersController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Questions', 'Users']
-        ];
-        $answers = $this->paginate($this->Answers);
+        // With pagination
+        //$this->paginate = ['contain' => ['Questions', 'Users']];
+        //$answers = $this->paginate($this->Answers);
 
+        // Without pagination (get Questions and Users)
+        $answers = $this->Answers->find('all')->contain(['Questions', 'Users']);
+
+        // Create .json
         $this->set(compact('answers'));
         $this->set('_serialize', ['answers']);
     }
@@ -65,8 +68,6 @@ class AnswersController extends AppController
         $this->set('_serialize', ['answers']);
 
     }
-
-
 
     /**
      * View method
@@ -162,7 +163,7 @@ class AnswersController extends AppController
             return true;
         }
 
-        // Tous les utilisateurs enregistrés peuvent ajouter des Réponses
+        // Tous les utilisateurs enregistrés peuvent ajouter des réponses
         if ($this->request->action === 'add' && $user['role'] != 'user') {
             return true;
         }
@@ -177,11 +178,5 @@ class AnswersController extends AppController
 
         return false;
 
-//        return parent::isAuthorized($user);
-    }
-
-    // Getter for AnswersTable
-    public function getAnswersTable() {
-        return $this->Answers;
     }
 }

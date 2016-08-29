@@ -1,7 +1,7 @@
 <h1>Search</h1>
 <div class="row">
     <div class="col-md-4 clearfix">
-        <form id="searchForm form-inline" ng-submit="search()">
+        <form id="searchForm form-inline" ng-submit="search()" ng-init="inQuestions=true; inAnswers=true">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search for..." id="searchTxt" ng-model="searchTxt" name="searchTxt">
                 <span class="input-group-btn">
@@ -10,7 +10,7 @@
             <div class="col-md-12">
                 <div class="col-md-6">
                     <div class="checkbox">
-                        <label><input type="checkbox" id="inQuestions" name="inQuestions" ng-model="inQuestions" checked="checked"> in questions</label>
+                        <label><input type="checkbox" id="inQuestions" name="inQuestions" ng-model="inQuestions"> in questions</label>
                     </div>
                 </div>
                 <div class="col-md-6">

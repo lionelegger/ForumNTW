@@ -110,12 +110,15 @@ Follow Exercice5 of TP CakePHP2.pdf
 Creation of 3 types of accounts:
 * **Admin** (can delete any question or answer of anybody)
 * **Author** (can create or answer a question; can delete only his own questions and answers)
-* **User** (can only view but cannot ask or answer a question)
+* **User** (can only view but cannot ask a question. But user can add an answer and edit/delete his own answers)
 
 Creation of 6 accounts (password is always 'password'):
 1. admin@email.com (Admin)
 2. jody@email.com (Author)
 3. nicolas@email.com (Author)
 4. camille@email.com (Author)
-5. lionel@email.com (Author)
+5. lionel@email.com (User)
 6. user@email.com (User)
+
+
+
