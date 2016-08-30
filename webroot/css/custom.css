@@ -10,6 +10,7 @@ button.btn-primary a:hover {
     color: #FFF;
     text-decoration: none;
 }
+
 a.glyphicon-btn {
     display: inline-block;
     cursor: pointer;
@@ -75,6 +76,10 @@ a.glyphicon-btn {
 .question-body {
     font-size: 15px;
     margin-bottom: 20px;
+}
+
+.answer-message {
+    margin-bottom: 1em;
 }
 
 

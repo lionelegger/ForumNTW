@@ -114,11 +114,18 @@ Creation of 3 types of accounts:
 
 Creation of 6 accounts (password is always 'password'):
 1. admin@email.com (Admin)
-2. jody@email.com (Author)
-3. nicolas@email.com (Author)
-4. camille@email.com (Author)
+2. nicolas@email.com (Author)
+3. camille@email.com (Author)
+4. author@email.com (Author)
 5. lionel@email.com (User)
 6. user@email.com (User)
+
+### Modifications for USERS:
+
+* /src/Controller/Component/UsersContoller.php :
+    - function login() : Log in a user and redirects to homepage
+    - function logout() : Log out a user and redirects to homepage
+    - function current() : Allows us to know the current user logged and 
 
 
 

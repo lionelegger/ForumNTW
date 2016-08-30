@@ -21,15 +21,6 @@ use Cake\Network\Exception\NotFoundException;
 
 $this->layout = false;
 
-/*switch (URL) {
-    case "question":
-        $this->_config['loginRedirect'] = "/#/questions";
-        break;
-    case "search":
-        $this->_config['loginRedirect'] = "/#/search";
-        break;
-}*/
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,7 +30,7 @@ $this->layout = false;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title><?= $this->fetch('title') ?></title>
-    <?= $this->Html->script('angular.js') ?>
+    <?= $this->Html->script('angular.min.js') ?>
     <?= $this->Html->script('angular-route.min.js') ?>
     <!--  Bootstrap -->
     <?= $this->Html->css('bootstrap.min.css') ?>
@@ -71,10 +62,7 @@ $this->layout = false;
             <?php if($userSession): ?>
                 <span class="hidden" id="userId" data-id="<?= $userSession['id'] ?>"></span>
                 <form class="navbar-form navbar-right">
-                    <button type="button" class="btn btn-default">
-                        <!-- Todo: link on btn btn-default -->
-                        <?= $this->Html->link(__('Logout'), ['controller' => 'Users', 'action' => 'logout']) ?>
-                    </button>
+                    <?= $this->Html->link(__('Logout'), ['controller' => 'Users', 'action' => 'logout'], array('class' => 'btn btn-default', 'type' => 'button')) ?>
                 </form>
                 <p class="navbar-text navbar-right">Welcome <?= $userSession['name'] ?></p>
             <?php else: ?>
@@ -87,7 +75,8 @@ $this->layout = false;
                         <input type="password" name="password" class="form-control" id="password" placeholder="Password">
                     </div>
                     <button type="submit" class="btn btn-primary">Login</button>&nbsp;
-                    <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#addUserModal">Register</button>
+                    <!-- TODO: if time, add Register functionality -->
+                    <!--<button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#addUserModal">Register</button>-->
                 </form>
             <?php endif; ?>
         </div><!-- /.navbar-collapse -->
@@ -151,7 +140,6 @@ $this->layout = false;
 <?= $this->Html->script('bootstrap.min.js') ?>
 <?= $this->Html->script('app.js') ?>
 <?= $this->Html->script('controllers.js') ?>
-<?= $this->Html->script('filters.js') ?>
 <script>window.onload = initialize;</script>
 </body>
 </html>

@@ -44,6 +44,7 @@ class User extends Entity
 //        'password'
 //    ];
 
+    // The following line allowd password encryption
     protected function _setPassword($password)
     {
         return (new DefaultPasswordHasher)->hash($password);

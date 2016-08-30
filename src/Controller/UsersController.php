@@ -52,21 +52,7 @@ class UsersController extends AppController
      *
      */
     public function current() {
-        /*try {
-            $this->set('user', $this->request->session()->read('Auth.User'));
-        }
-        catch (Exception $e) {
-            echo $e->getMessage();
-        }*/
-
         $this->set('user', $this->request->session()->read('Auth.User'));
-
-        /*if ($user = $this->request->session()->read('Auth.User')) {
-            $this->set('user', $user);
-        }
-        else {
-            throw new Exception("User non authentificated");
-        }*/
     }
 
     /**
@@ -150,7 +136,7 @@ class UsersController extends AppController
             if ($user) {
                 $this->Auth->setUser($user);
                 // return $this->redirect($this->Auth->redirectUrl());
-                // Todo: To be improved.... hardcoded...
+                // Todo: To be improved.... redirection hardcoded...
                 return $this->redirect($this->Auth->redirectUrl("/#/questions"));
             }
             $this->Flash->error(__('Invalid username or password, try again'));
