@@ -12,11 +12,6 @@ function initialize() {
     //console.log ("inside initialize");
     'use strict';
 
-    $('#loginModal').on('shown.bs.modal', function () {
-        $('#email').focus();
-    });
+    // Put here any JS that should be loaded at initialization
 
-    $('#addQuestionModal').on('shown.bs.modal', function () {
-        $('#title').focus();
-    });
 }

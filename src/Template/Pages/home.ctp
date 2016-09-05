@@ -75,7 +75,7 @@ $this->layout = false;
                         <input type="password" name="password" class="form-control" id="password" placeholder="Password">
                     </div>
                     <button type="submit" class="btn btn-primary">Login</button>&nbsp;
-                    <!-- TODO: if time, add Register functionality -->
+                    <!-- TODO: if time, add Register functionality (see ADD USER model) -->
                     <!--<button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#addUserModal">Register</button>-->
                 </form>
             <?php endif; ?>
@@ -84,6 +84,7 @@ $this->layout = false;
 </nav>
 
 <!-- ADD USER modal -->
+<!--
 <div class="modal fade" tabindex="-1" role="dialog" id="addUserModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -119,17 +120,13 @@ $this->layout = false;
                 </div>
             </div>
         </form>
-    </div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
+    </div>
+</div>
+</div>
+-->
 
 <div class="container">
-    <!--<p>LOGIN ID = *<span ng-bind="currentUserId"></span>*</p>-->
-    <div ng-class="'alert alert-' + message().type" ng-show="message().show">
-        <button type="button" class="close" ng-click="message().show = false">×</button>
-        <msg key-expr="message().text"></msg>
-    </div>
+    <!--  We load the angularJS templates here (depending of ng-route defined in app.js)  -->
     <ng-view></ng-view>
 </div>
 

@@ -37,8 +37,8 @@ class QuestionsController extends AppController
         // $this->paginate = ['contain' => ['Users']];
         // $questions = $this->paginate($this->Questions);
 
-        // Without pagination (get Users)
-        $questions = $this->Questions->find('all')->contain(['Users']);
+        // Without pagination, order by modification date (+ get related Users)
+        $questions = $this->Questions->find('all',['order' => ['Questions.modified' => 'DESC']])->contain(['Users']);
 
         // Create .json
         $this->set(compact('questions'));
@@ -54,6 +54,7 @@ class QuestionsController extends AppController
      */
     public function view($id = null)
     {
+        // TODO: sort the answers with the latest answer at the bottom (by modified date). At the moment it's sorted by user_id
         $question = $this->Questions->get($id, [
             'contain' => ['Users', 'Answers' => ['Users']]
         ]);
@@ -94,7 +95,7 @@ class QuestionsController extends AppController
                 $this->Flash->error(__('The question could not be saved. Please, try again.'));
             }
         }
-        $users = $this->Questions->Users->find('list', ['limit' => 200]);
+        $users = $this->Questions->Users->find('list');
         $this->set(compact('question', 'users'));
         $this->set('_serialize', ['question']);
     }
@@ -175,7 +176,7 @@ class QuestionsController extends AppController
         $searchTxt = '%'.$this->request->query('searchTxt').'%';
         $questions = $this->Questions->find()->contain(['Users'])->where(['title LIKE' => $searchTxt])->orWhere(['body LIKE' => $searchTxt]);
 
-        $this->set(compact('questions'));
+        $this->set(compact('questions', 'users'));
         $this->set('_serialize', ['questions']);
 
     }

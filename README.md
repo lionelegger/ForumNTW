@@ -6,9 +6,6 @@ Installation of MAMP with phpMyAdmin (that administrates mySQL)
 
 ## Creation of CakePHP Application Skeleton
 
-[![Build Status](https://img.shields.io/travis/cakephp/app/master.svg?style=flat-square)](https://travis-ci.org/cakephp/app)
-[![License](https://img.shields.io/packagist/l/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
-
 A skeleton for creating applications with [CakePHP](http://cakephp.org) 3.x.
 The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
 
@@ -32,6 +29,7 @@ Edition of `config/app.php` and setup the 'Datasources' and any other configurat
 - username: ‘root’
 - password: ‘root’
 - database: ‘Forum’
+
 
 ## creation of Forum DATABASE
 Creation of a DATABASE called 'Forum' in phpMyAdmin
@@ -81,6 +79,8 @@ CREATE TABLE answers(
 
 Now all traffic lights are green when accessing the [http://localhost:8888](http://localhost:8888/).
 
+## CAKEPHP 3
+
 ### Generation of elements users, questions and answers
 In shell, run the following instructions.
 ```sh
@@ -88,6 +88,7 @@ bin/cake bake all Users
 bin/cake bake all Questions
 bin/cake bake all Answers
 ```
+
 
 ### Creating RESTful Routes
 [CAKEPHP documentation](http://book.cakephp.org/3.0/en/development/routing.html#resource-routes)
@@ -102,8 +103,10 @@ Router::scope('/', function ($routes) {
 });
 ```
 
+
 Now you get a json file when you make requests like [http://localhost:8888/questions/index.json](http://localhost:8888/questions/index.json) or
 [http://localhost:8888/questions/view/1.json](http://localhost:8888/questions/view/1.json)
+
 
 ### User accounts type preparation
 Follow Exercice5 of TP CakePHP2.pdf
@@ -120,12 +123,86 @@ Creation of 6 accounts (password is always 'password'):
 5. lionel@email.com (User)
 6. user@email.com (User)
 
-### Modifications for USERS:
 
-* /src/Controller/Component/UsersContoller.php :
-    - function login() : Log in a user and redirects to homepage
-    - function logout() : Log out a user and redirects to homepage
-    - function current() : Allows us to know the current user logged and 
+### CakePHP [USERS controller](/src/Controller/Component/UsersContoller.php):
+
+* function login() : Log in a user and redirects to homepage
+* function logout() : Log out a user and redirects to homepage
+* function current() : Gets the current user logged
+
+
+### CakePHP [QUESTIONS controller](/src/Controller/Component/QuestionsContoller.php):
+
+* function index() : lists all questions (with users information)
+* function view() : Renders a specific question (id) with its corresponding answers (and users who post them)
+* function add() : Add a new question (post method)
+* function edit() : Edit a question
+* function delete() : Delete a question
+* function isAuthorized() : Set the rights to add/edit/delete a question
+    - Admin: can add a question and edit/delete any question
+    - Author: can add a question and edit/delete his own questions only
+    - User: can only see questions but not add/edit/delete a question
+* function search() : search in title and body of the question (used in search page)
+
+
+### CakePHP [ANSWERS controller](/src/Controller/Component/AnswersContoller.php):
+
+* function add() : Add a new answer (post method)
+* function edit() : Edit an answer
+* function delete() : Delete an answer
+* function isAuthorized() : Set the rights to add/edit/delete a question
+    - Admin: can add a answer and edit/delete any answer
+    - Author & User: can add an answer and edit/delete his own answers only
+* function search() : search in message of the answer (used in search page). When we search in the answers, we get the relative question also.
+
+
+### CakePHP [HOMEPAGE](/src/Template/Pages/home.ctp)
+
+This page contains the main html structure of all other pages. It contains the <head> and all files inclusions (like css and js files)
+It contains also the navigation (nav) where you can find the navigation, as well as the login/logout functionality.
+The AnjularJs application "ng-app" is defined at the body level of this page and runs the "MainCtrl" (defined in [controllers.js](webroot/js/controllers.js)).
+The AngularJs templates are loaded in the div.container using ngView directive (see below in app.js)
+
+
+## ANGULARJS controllers
+
+### [app.js](/webroot/js/app.js)
+
+A specific templateUrl is loaded in the div.container of the homepage using the directive ngView (using ngRoute service defined in js/app.js)
+
+* when "/questions", it loads the templateUrl "partial/questions.html" and runs the QuestionsCtrl
+* when "/questions/:id", it loads the templateUrl "partial/answers.html" and runs the AnswersCtrl
+* when "/search", it loads the templateUrl "partial/search.html" and runs the SearchCtrl
+
+
+### [Controllers.js](/webroot/js/controllers.js)
+
+#### MainCtrl
+* The first function gets the current user (in order to show/hide the actions buttons relatively to the current user)
+* The second function will logout the user
+* The third function help us to know which is the current page in order to highlight it in the navigation
+
+#### QuestionsCtrl
+* The first function loads the full list of questions.
+    This function is called when the controller is runned (when the template answers.html loads) but also at the end of the functions add, edit and delete functions in order to refresh the list.
+* The second and third functions are the two step to edit a question.
+    The first steps loads the question title and body in the modal.
+    The second steps saves it in the database.
+* The fourth function adds a question in the database.
+* The last two functions are responsible to delete a question.
+    The first steps asks confirmation and provides the question data.
+    The second one performs the actual deletion.
+
+#### AnswersCtrl
+* The first function loads the full list of answers corresponding to a specific question.
+    This function is called when the controller is runned (when the template answers.html loads) but also at the end of the function add, edit and delete in order to refresh the list.
+* The other functions are very similar to the functions found in QuestionsCtrl to add, edit and delete answers.
+
+#### SearchCtrl
+* When the search function is called, we have two different cases: we can search in the questions or/and in the answers (or none of them).
+    The difference is that when we perform a search in answers, we also get the corresponding question (see the search function of the AnswersCtrl)
+
+
 
 
 

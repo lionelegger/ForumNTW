@@ -109,7 +109,7 @@
                     <ul class="list-unstyled text-muted small">
                         <li class="hidden">{{question.id}}</li>
                         <li><span class="glyphicon glyphicon-user"></span>&nbsp;Posted by <strong>{{question.user.name}}</strong></li>
-                        <li><span class="glyphicon glyphicon-time"></span>&nbsp;{{question.created|date:'short'}}</li>
+                        <li><span class="glyphicon glyphicon-time"></span>&nbsp;{{question.modified|date:'short'}}</li>
                     </ul>
                     <div class="action" ng-if="currentUserId">
                         <button type="button" class="btn btn-default btn-sm" ng-click="editQuestionLoad(question.id)" ng-show="currentUserId==question.user.id || currentUserRole=='admin'" data-toggle="modal" data-target="#editQuestionModal"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit</button>
