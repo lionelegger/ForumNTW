@@ -44,9 +44,8 @@ class AnswersController extends AppController
     public function search()
     {
        $searchTxt = '%'.$this->request->query('searchTxt').'%';
-       $answers = $this->Answers->find()->contain(['Questions', 'Users'])->where(['message LIKE' => $searchTxt]);
+       $answers = $this->Answers->find()->contain(['Questions'=> ['Users'], 'Users'])->where(['message LIKE' => $searchTxt]);
 
-//        TODO: get also the name of the user in the json file when http://localhost:8888/answers/search.json?searchTxt=cool
         $this->set(compact('answers', 'users'));
         $this->set('_serialize', ['answers', 'users']);
 

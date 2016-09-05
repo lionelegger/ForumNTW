@@ -124,14 +124,14 @@ Creation of 6 accounts (password is always 'password'):
 6. user@email.com (User)
 
 
-### CakePHP [USERS controller](/src/Controller/Component/UsersContoller.php):
+### CakePHP [USERS controller](/src/Controller/Component/UsersController.php):
 
 * function login() : Log in a user and redirects to homepage
 * function logout() : Log out a user and redirects to homepage
 * function current() : Gets the current user logged
 
 
-### CakePHP [QUESTIONS controller](/src/Controller/Component/QuestionsContoller.php):
+### CakePHP [QUESTIONS controller](/src/Controller/Component/QuestionsController.php):
 
 * function index() : lists all questions (with users information)
 * function view() : Renders a specific question (id) with its corresponding answers (and users who post them)
@@ -145,7 +145,7 @@ Creation of 6 accounts (password is always 'password'):
 * function search() : search in title and body of the question (used in search page)
 
 
-### CakePHP [ANSWERS controller](/src/Controller/Component/AnswersContoller.php):
+### CakePHP [ANSWERS controller](/src/Controller/Component/AnswersController.php):
 
 * function add() : Add a new answer (post method)
 * function edit() : Edit an answer

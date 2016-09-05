@@ -58,7 +58,7 @@
                     <ul class="list-unstyled text-muted small">
                         <li class="hidden">{{answer.question.id}}</li>
                         <!-- TODO: The author of the question is not in the json file. only the user_id -->
-                        <li><span class="glyphicon glyphicon-user"></span>&nbsp;Posted by <strong>{{answer.question.user_id}}</strong></li>
+                        <li><span class="glyphicon glyphicon-user"></span>&nbsp;Posted by <strong>{{answer.question.user.name}}</strong></li>
                         <li><span class="glyphicon glyphicon-time"></span>&nbsp;{{answer.question.created|date:'short'}}</li>
                     </ul>
                     <h4><a href="#/questions/{{answer.question.id}}">{{answer.question.answers_count}} answers</a></h4>
