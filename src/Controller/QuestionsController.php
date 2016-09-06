@@ -54,9 +54,14 @@ class QuestionsController extends AppController
      */
     public function view($id = null)
     {
-        // TODO: sort the answers with the latest answer at the bottom (by modified date). At the moment it's sorted by user_id
         $question = $this->Questions->get($id, [
-            'contain' => ['Answers' => ['Users'], 'Users']
+            'contain' => [
+                'Answers' => [
+                    'Users',
+                    'sort' => ['Answers.modified' => 'ASC']
+                ],
+                'Users',
+            ],
         ]);
 
         $this->set('question', $question);
