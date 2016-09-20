@@ -33,6 +33,7 @@ Edition of `config/app.php` and setup the 'Datasources' and any other configurat
 
 ## creation of Forum DATABASE
 Creation of a DATABASE called 'Forum' in phpMyAdmin
+The relational design of the FORUM database is illustrated in [this powerpoint](database.pptx)
 
 ### Creation of 3 tables
 Creation of the 3 tables in phpMyAdmin
