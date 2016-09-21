@@ -58,7 +58,7 @@ class QuestionsController extends AppController
             'contain' => [
                 'Answers' => [
                     'Users',
-                    'sort' => ['Answers.modified' => 'ASC']
+                    'sort' => ['Answers.created' => 'ASC']
                 ],
                 'Users',
             ],

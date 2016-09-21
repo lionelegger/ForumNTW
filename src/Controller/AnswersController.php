@@ -61,7 +61,8 @@ class AnswersController extends AppController
     public function view($id = null)
     {
         $answer = $this->Answers->get($id, [
-            'contain' => ['Questions', 'Users']
+            'order' => ['Answers.created' => 'ASC'],
+            'contain' => ['Questions', 'Users'],
         ]);
 
         $this->set('answer', $answer);

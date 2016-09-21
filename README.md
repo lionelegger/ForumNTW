@@ -70,7 +70,7 @@ CREATE TABLE answers(
   id INT AUTO_INCREMENT PRIMARY KEY,
   question_id INT NOT NULL,
   user_id INT NOT NULL,
-  message VARCHAR(255) NOT NULL,
+  message TEXT NOT NULL,
   created DATETIME DEFAULT NULL,
   modified DATETIME DEFAULT NULL,
   FOREIGN KEY question_key(question_id) REFERENCES questions(id),
